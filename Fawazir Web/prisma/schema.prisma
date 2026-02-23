@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                 String              @id @default(cuid())
+  email              String              @unique
+  passwordHash       String
+  role               String              @default("PLAYER")
+  displayName        String?
+  bio                String?
+  avatar             String?
+  color              String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  myCompetitions     Competition[]       @relation("Owner")
+  submissions        Submission[]
+  notifications      Notification[]
+  dayAssignments     DayTeamAssignment[]
+  joinedCompetitions Participation[]
+  chatMessages       ChatMessage[]
+  tasks              Task[]
+  dailyEvaluations   DailyEvaluation[]
+  khairEntries       KhairEntry[]
+}
+
+model Competition {
+  id             String          @id @default(cuid())
+  code           String          @unique
+  title          String
+  description    String?
+  bannerUrl      String?
+  ownerId        String
+  status         String          @default("ACTIVE")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  startDate      DateTime?
+  visibilityType String          @default("MANUAL")
+  owner          User            @relation("Owner", fields: [ownerId], references: [id])
+  days           Day[]
+  participants   Participation[]
+  teams          Team[]
+}
+
+model Participation {
+  id            String      @id @default(cuid())
+  userId        String
+  competitionId String
+  totalScore    Int         @default(0)
+  joinedAt      DateTime    @default(now())
+  stars         Int         @default(0)
+  teamId        String?
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  team          Team?       @relation(fields: [teamId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+
+  @@unique([userId, competitionId])
+}
+
+model Team {
+  id             String              @id @default(cuid())
+  name           String
+  competitionId  String
+  createdAt      DateTime            @default(now())
+  members        Participation[]
+  dayAssignments DayTeamAssignment[]
+  chatMessages   ChatMessage[]
+  competition    Competition         @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+}
+
+model Day {
+  id               String              @id @default(cuid())
+  competitionId    String
+  dayNumber        Int
+  title            String
+  content          String?
+  unlockDate       DateTime?
+  isManualOpen     Boolean             @default(false)
+  isManualLocked   Boolean             @default(false)
+  isTeamsEnabled   Boolean             @default(false)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  challengeContent String?
+  challengeTitle   String?
+  visibilityType   String              @default("MANUAL")
+  tasksJson        String              @default("[]")
+  competition      Competition         @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+  teamAssignments  DayTeamAssignment[]
+  questions        Question[]
+  tasks            Task[]
+  dailyEvaluations DailyEvaluation[]
+
+  @@unique([competitionId, dayNumber])
+}
+
+model DayTeamAssignment {
+  id        String   @id @default(cuid())
+  dayId     String
+  userId    String
+  teamId    String
+  createdAt DateTime @default(now())
+  day       Day      @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([dayId, userId])
+}
+
+model Question {
+  id            String       @id @default(cuid())
+  dayId         String
+  text          String
+  type          String       @default("TEXT")
+  options       String[]
+  correctAnswer String?
+  points        Int          @default(10)
+  isMandatory   Boolean      @default(true)
+  day           Day          @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  submissions   Submission[]
+}
+
+model Submission {
+  id          String   @id @default(cuid())
+  userId      String
+  questionId  String
+  answer      String
+  isCorrect   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  feedback    String?
+  ratingStars Int?
+  question    Question @relation(fields: [questionId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, questionId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  message   String
+  type      String   @default("INFO")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  text      String
+  createdAt DateTime @default(now())
+
+  @@index([teamId])
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dayId     String?
+  day       Day?     @relation(fields: [dayId], references: [id], onDelete: Cascade)
+
+  title     String
+  status    String   @default("TODO")
+  isBonus   Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, dayId])
+}
+
+model DailyEvaluation {
+  id        String   @id @default(cuid())
+  userId    String
+  dayId     String
+  score     Int      @default(0)
+  feedback  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day       Day      @relation(fields: [dayId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dayId])
+}
+
+model Settings {
+  key   String @id
+  value String
+}
+
+model KhairEntry {
+  id              String   @id @default(cuid())
+  userId          String
+  dayNumber       Int
+  completedJuz    Int[]
+  completedHadith Int[]
+  charityDeeds    String[]
+  points          Int      @default(0)
+  charityScore    Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dayNumber])
+}
