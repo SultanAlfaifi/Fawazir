@@ -1,9 +1,9 @@
 import { Resend } from 'resend'
 
 export async function sendVerificationEmail(email: string, token: string) {
-    // Read variables inside the function to ensure they are up to date
+    // Explicitly using the requested sender address
+    const fromEmail = "Fawazir <hello@mail.fawazir.com>"
     const apiKey = process.env.RESEND_API_KEY
-    const fromEmail = process.env.RESEND_FROM_EMAIL
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.APP_URL || 'http://localhost:3000'
 
     const confirmLink = `${baseUrl}/verify?token=${token}`
