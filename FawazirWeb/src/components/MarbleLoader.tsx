@@ -12,7 +12,7 @@ export default function MarbleLoader({ className = "" }: MarbleLoaderProps) {
     return (
         <div className={cn("relative w-32 h-32 md:w-40 md:h-40 flex items-center justify-center", className)}>
             {/* Floating Glow */}
-            <div className="absolute inset-0 bg-amber-500/10 blur-3xl rounded-full scale-150 animate-pulse" />
+            <div className="absolute inset-0 bg-amber-500/10 blur-3xl rounded-full scale-150 animate-pulse hidden md:block" />
 
             {/* The Marbles Animation */}
             <div className="relative w-full h-full flex items-center justify-center">
@@ -35,7 +35,7 @@ export default function MarbleLoader({ className = "" }: MarbleLoaderProps) {
                             delay: m.delay,
                             ease: "easeInOut"
                         }}
-                        className={cn("absolute rounded-full shadow-lg shadow-black/5 blur-[1px]", m.color, m.size)}
+                        className={cn("absolute rounded-full shadow-lg shadow-black/5 md:blur-[1px]", m.color, m.size)}
                     />
                 ))}
 
@@ -43,7 +43,7 @@ export default function MarbleLoader({ className = "" }: MarbleLoaderProps) {
                 <motion.div
                     animate={{ scale: [1, 1.1, 1], rotate: 360 }}
                     transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                    className="z-10 bg-white/80 backdrop-blur-xl p-5 rounded-3xl shadow-2xl border border-white"
+                    className="z-10 bg-white/80 backdrop-blur-md md:backdrop-blur-xl p-5 rounded-3xl shadow-2xl border border-white"
                 >
                     <Sparkles className="w-10 h-10 text-amber-500" />
                 </motion.div>

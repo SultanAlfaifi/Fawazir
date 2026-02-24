@@ -62,9 +62,9 @@ export function CharacterShowcase() {
     return (
         <div className="relative">
             {/* Horizontal Scroll for Mobile / Grid for Desktop */}
-            <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 py-10 px-4 md:px-0 snap-x snap-mandatory scrollbar-hide perspective-2000">
+            <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 py-6 md:py-10 px-4 md:px-0 snap-x snap-mandatory scrollbar-hide perspective-1000">
                 {CHARACTERS.map((char, index) => (
-                    <div key={char.id} className="min-w-[85vw] md:min-w-0 snap-center">
+                    <div key={char.id} className="min-w-[75vw] sm:min-w-[60vw] md:min-w-0 snap-center">
                         <PremiumCard char={char} index={index} />
                     </div>
                 ))}
@@ -179,7 +179,7 @@ function PremiumCard({ char, index }: { char: any, index: number }) {
                                 alt={char.name}
                                 fill
                                 className="object-cover"
-                                unoptimized
+                                priority={index === 0}
                             />
                         </div>
                         {/* Dark overlay for "blackness" and text readability */}

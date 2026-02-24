@@ -1,12 +1,8 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import prisma from '@/lib/db';
 import { getSession } from '@/lib/session';
 
-// Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
+// Initialize Gemini with System Prompt
 const SULTANA_SYSTEM_PROMPT = `
 أنتِ "سلطانة" 👸، المرشدة الذكية لمنصة "فوازير".
 دورك هو مساعدة المستخدمين (مشرفين ولاعبين) في استخدام المنصة، وشرح كيفية عمل المسابقات، والمساعدة في التنقل، والدردشة العامة حول التحديات والمعرفة.
@@ -28,6 +24,13 @@ export async function POST(req: Request) {
     try {
         const { message, history } = await req.json();
 
+        if (!process.env.GEMINI_API_KEY) {
+            console.error('❌ Missing GEMINI_API_KEY');
+            return NextResponse.json({ text: "عذراً يا رفيقي، يبدو أن أسرار قوتي مفقودة حالياً." }, { status: 500 });
+        }
+
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
         let userContext = "";
         const session = await getSession();
 
@@ -37,31 +40,45 @@ export async function POST(req: Request) {
             userContext = "المستخدم زائر غير مسجل.";
         }
 
-        const fullSystemPrompt = `${SULTANA_SYSTEM_PROMPT}\n\nسياق المستخدم:\n${userContext}`;
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            systemInstruction: `${SULTANA_SYSTEM_PROMPT}\n\nسياق المستخدم الحالي:\n${userContext}`,
+        });
 
-        // Process history
-        let validHistory = (history || []).map((msg: any) => ({
-            role: msg.role === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.content }]
-        }));
+        // Process history - messages come from client with properties: role, parts
+        // Important: History must alternate between user and model
+        let validHistory = (history || [])
+            .filter((msg: any) => msg.role === 'user' || msg.role === 'assistant')
+            .map((msg: any) => ({
+                role: msg.role === 'user' ? 'user' : 'model',
+                parts: [{ text: msg.content || (msg.parts && msg.parts[0]?.text) || "" }]
+            }));
 
         const chat = model.startChat({
             history: validHistory,
             generationConfig: {
-                maxOutputTokens: 500,
+                maxOutputTokens: 1000,
                 temperature: 0.7,
             },
         });
 
-        const finalMessage = `${fullSystemPrompt}\n\nUser Message: ${message}`;
-        const result = await chat.sendMessage(finalMessage);
-        const text = result.response.text();
+        const result = await chat.sendMessage(message);
+        const response = await result.response;
+        const text = response.text();
 
         return NextResponse.json({ text });
     } catch (error: any) {
-        console.error('Gemini API Error:', error);
+        console.error('❌ Sultana/Gemini Error:', error);
+
+        // Check for specific Gemini errors if possible
+        if (error.message?.includes('429')) {
+            return NextResponse.json({
+                text: "عذراً يا رفيقي، لقد نفذ طاقتي لهذا الوقت. عد إليّ بعد قليل!"
+            });
+        }
+
         return NextResponse.json({
-            text: "عذراً، يبدو أنني مشغولة قليلاً بترتيب أفكاري. حاول مرة أخرى!"
+            text: "عذراً يا رفيقي، يبدو أن خيوط السحر قد تشابكت في تفكيري. حاول مرة أخرى!"
         });
     }
 }

@@ -4,89 +4,157 @@ import { useActionState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { login } from '@/actions/auth'
-import { Loader2, ArrowLeft, Mail, Lock, Sparkles } from 'lucide-react'
+import { Loader2, ArrowLeft, Mail, Lock, Sparkles, ShieldCheck } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
     const [state, action, pending] = useActionState(login, undefined)
+    const searchParams = useSearchParams()
+    const isVerified = searchParams.get('verified') === 'true'
+
+    // Form variants for staggered animation
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    }
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1 }
+    }
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center p-4 font-sans text-gray-900" dir="rtl">
+        <div className="min-h-dynamic bg-white flex items-center justify-center p-6 font-sans text-gray-900 relative overflow-hidden" dir="rtl">
+            {/* ── Background Accents ── */}
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+                <div className="absolute -top-[10%] -right-[5%] w-64 h-64 bg-amber-50 rounded-full blur-3xl opacity-60" />
+                <div className="absolute -bottom-[5%] -left-[5%] w-72 h-72 bg-indigo-50 rounded-full blur-3xl opacity-50" />
+            </div>
 
-            <div className="w-full max-w-sm space-y-8">
-                {/* Header */}
-                <div className="text-center space-y-4">
-                    <Link href="/" className="inline-flex w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl items-center justify-center shadow-lg shadow-amber-500/20 mb-4 transition-transform hover:scale-105 active:scale-95">
-                        <Sparkles className="w-8 h-8 text-white" />
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="w-full max-w-sm relative z-10"
+            >
+                {/* Logo & Header */}
+                <motion.div variants={itemVariants} className="text-center space-y-5 mb-10">
+                    <Link href="/" className="inline-flex w-20 h-20 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 rounded-[2rem] items-center justify-center shadow-2xl shadow-amber-500/20 mb-2 transition-all hover:scale-105 active:scale-95 group">
+                        <Sparkles className="w-10 h-10 text-white transition-transform group-hover:rotate-12" />
                     </Link>
-                    <h1 className="text-3xl font-black tracking-tight text-gray-900">مرحباً بعودتك!</h1>
-                    <p className="text-gray-500 font-medium">سجل دخولك لاستكمال رحلة التحدي</p>
-                </div>
-
-                {/* Form */}
-                <form action={action} className="space-y-6">
-                    <div className="space-y-4">
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-gray-700 block text-right">البريد الإلكتروني</label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400 group-focus-within:text-amber-600 transition-colors">
-                                    <Mail className="w-5 h-5" />
-                                </div>
-                                <input
-                                    name="email"
-                                    type="email"
-                                    placeholder="name@example.com"
-                                    className="w-full pr-10 pl-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
-                                />
-                            </div>
-                            {state?.errors?.email && (
-                                <p className="text-red-500 text-xs font-bold text-right pt-1">{state.errors.email[0]}</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-gray-700 block text-right">كلمة المرور</label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400 group-focus-within:text-amber-600 transition-colors">
-                                    <Lock className="w-5 h-5" />
-                                </div>
-                                <input
-                                    name="password"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    className="w-full pr-10 pl-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
-                                />
-                            </div>
-                            {state?.errors?.password && (
-                                <p className="text-red-500 text-xs font-bold text-right pt-1">{state.errors.password[0]}</p>
-                            )}
-                        </div>
+                    <div className="space-y-2">
+                        <h1 className="text-4xl font-black tracking-tight text-gray-950">فوازير</h1>
+                        <p className="text-gray-500 font-bold text-lg">سجل دخولك للمغامرة</p>
                     </div>
+                </motion.div>
 
-                    <button
-                        type="submit"
-                        disabled={pending}
-                        className="w-full py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-bold shadow-lg shadow-gray-900/10 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group relative overflow-hidden"
+                {/* Verification Success Message */}
+                {isVerified && (
+                    <motion.div
+                        variants={itemVariants}
+                        className="mb-8 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3 text-emerald-800"
                     >
-                        {pending ? (
-                            <Loader2 className="w-5 h-5 animate-spin" />
-                        ) : (
-                            <>
-                                <span>الدخول</span>
-                                <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                            </>
-                        )}
-                    </button>
+                        <ShieldCheck className="w-5 h-5 flex-shrink-0" />
+                        <span className="text-xs font-black">تم تفعيل حسابك بنجاح! يمكنك الدخول الآن.</span>
+                    </motion.div>
+                )}
 
-                    {/* Register Links */}
-                    <div className="pt-6 border-t border-gray-100 flex flex-col items-center gap-3">
-                        <p className="text-gray-500 text-sm font-medium">ليس لديك حساب؟</p>
-                        <div className="flex gap-3 w-full">
-                            <Link href="/register" className="flex-1 py-3 text-center rounded-xl border border-gray-200 hover:border-amber-500 hover:bg-amber-50 text-gray-700 hover:text-amber-700 font-bold text-sm transition-all">
-                                إنشاء حساب جديد
-                            </Link>
+                {/* Main Form Card */}
+                <motion.div variants={itemVariants} className="bg-white/50 backdrop-blur-sm border border-gray-100 p-2 rounded-[2.5rem] shadow-2xl shadow-black/5">
+                    <form action={action} noValidate className="bg-white rounded-[2.2rem] p-8 space-y-6">
+                        <div className="space-y-5">
+                            {/* Email Input */}
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest mr-2 block">البريد الإلكتروني</label>
+                                <div className="relative group">
+                                    <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-amber-500 transition-colors">
+                                        <Mail className="w-5 h-5" />
+                                    </div>
+                                    <input
+                                        name="email"
+                                        type="email"
+                                        placeholder="name@example.com"
+                                        className="w-full pr-12 pl-4 py-4 bg-gray-50 border-2 border-transparent rounded-[1.2rem] text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-amber-500/5 focus:border-amber-500/30 transition-all font-bold text-sm"
+                                    />
+                                </div>
+                                {state?.errors?.email && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="bg-red-50 text-red-600 px-4 py-2.5 rounded-xl text-[10px] font-black flex items-center gap-2 border border-red-100/50 mt-2"
+                                    >
+                                        <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
+                                        {state.errors.email[0]}
+                                    </motion.div>
+                                )}
+                            </div>
+
+                            {/* Password Input */}
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest block mr-2">كلمة المرور</label>
+                                <div className="relative group">
+                                    <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-amber-500 transition-colors">
+                                        <Lock className="w-5 h-5" />
+                                    </div>
+                                    <input
+                                        name="password"
+                                        type="password"
+                                        placeholder="••••••••"
+                                        className="w-full pr-12 pl-4 py-4 bg-gray-50 border-2 border-transparent rounded-[1.2rem] text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-amber-500/5 focus:border-amber-500/30 transition-all font-bold text-sm"
+                                    />
+                                </div>
+                                {state?.errors?.password && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="bg-red-50 text-red-600 px-4 py-2.5 rounded-xl text-[10px] font-black flex items-center gap-2 border border-red-100/50 mt-2"
+                                    >
+                                        <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
+                                        {state.errors.password[0]}
+                                    </motion.div>
+                                )}
+                            </div>
                         </div>
+
+                        {/* Submit Button */}
+                        <motion.button
+                            whileTap={{ scale: 0.98 }}
+                            type="submit"
+                            disabled={pending}
+                            className="w-full py-5 bg-gray-950 hover:bg-gray-800 text-white rounded-[1.5rem] font-black text-sm shadow-xl shadow-gray-900/20 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale group relative overflow-hidden"
+                        >
+                            {pending ? (
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                            ) : (
+                                <>
+                                    <span>تسجيل الدخول</span>
+                                    <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                                </>
+                            )}
+                        </motion.button>
+                    </form>
+                </motion.div>
+
+                {/* Footer Links */}
+                <motion.div variants={itemVariants} className="mt-10 text-center space-y-6">
+                    <p className="text-gray-400 text-sm font-bold">ليس لديك حساب؟</p>
+                    <div className="flex flex-col gap-3">
+                        <Link href="/register" className="w-full py-4 text-center rounded-2xl border-2 border-gray-100 hover:border-amber-500/50 hover:bg-amber-50 text-gray-700 hover:text-amber-700 font-black text-sm transition-all">
+                            إنشاء حساب جديد
+                        </Link>
                     </div>
-                </form>
+                </motion.div>
+            </motion.div>
+
+            {/* Subtle Decoration */}
+            <div className="fixed bottom-8 text-gray-200 pointer-events-none select-none">
+                <p className="text-[100px] font-black opacity-[0.03] whitespace-nowrap">FAWAZIR IDENTITY</p>
             </div>
         </div>
     )

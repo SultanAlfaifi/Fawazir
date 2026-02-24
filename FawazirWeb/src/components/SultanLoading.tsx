@@ -28,33 +28,30 @@ export default function SultanLoading({ fullScreen = true, className = "" }: Sul
     if (!mounted) return null
 
     const containerClasses = fullScreen
-        ? "fixed inset-0 z-[99999] flex items-center justify-center bg-white overflow-hidden"
-        : `flex flex-col items-center justify-center py-20 ${className}`
+        ? "fixed inset-0 z-[99999] flex items-center justify-center bg-white overflow-hidden min-h-dynamic"
+        : `flex flex-col items-center justify-center py-10 md:py-20 ${className}`
 
     return (
         <div className={containerClasses} dir="rtl">
             {/* ── Cinematic Mesh Background ── */}
             {fullScreen && (
-                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
+                    <motion.div
+                        animate={{
+                            scale: [1, 1.1, 1],
+                            rotate: [0, 20, 0],
+                        }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        className="absolute -top-[10%] -right-[10%] w-[80%] md:w-[70%] h-[70%] bg-amber-100/30 blur-[120px] rounded-full"
+                    />
                     <motion.div
                         animate={{
                             scale: [1, 1.2, 1],
-                            rotate: [0, 45, 0],
-                            x: [0, 50, 0],
-                        }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                        className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-amber-100/40 blur-[120px] rounded-full"
-                    />
-                    <motion.div
-                        animate={{
-                            scale: [1, 1.3, 1],
-                            rotate: [0, -60, 0],
-                            x: [0, -30, 0],
+                            rotate: [0, -30, 0],
                         }}
                         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                        className="absolute -bottom-[20%] -left-[10%] w-[60%] h-[60%] bg-indigo-100/30 blur-[100px] rounded-full"
+                        className="absolute -bottom-[10%] -left-[10%] w-[70%] md:w-[60%] h-[60%] bg-indigo-100/20 blur-[100px] rounded-full"
                     />
-                    <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px]" />
                 </div>
             )}
 
@@ -83,9 +80,9 @@ export default function SultanLoading({ fullScreen = true, className = "" }: Sul
                         <AnimatePresence mode="wait">
                             <motion.p
                                 key={messageIndex}
-                                initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-                                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                                exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 1.1 }}
                                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                                 className="text-2xl md:text-3xl text-gray-400 font-black leading-relaxed max-w-xl mx-auto italic tracking-tight"
                             >

@@ -12,11 +12,10 @@ import Image from 'next/image'
 export function SultanaChatButton() {
     const [isOpen, setIsOpen] = useState(false)
     const [messages, setMessages] = useState<{ role: 'user' | 'assistant', content: string }[]>([
-        { role: 'assistant', content: 'أهلاً بك يا بطل في عالم فوازير 2026! أنا سلطانة ذكاء فوازير 2026 الخارق. اطلب علمك أو اسأل عن خفايا التحدي، وسأجيبك بفيض من الحكمة.' }
+        { role: 'assistant', content: 'أهلاً بك يا بطل في عالم فوازير! أنا سلطانة ذكاء فوازير الخارق. اطلب علمك أو اسأل عن خفايا التحدي، وسأجيبك بفيض من الحكمة.' }
     ])
     const [input, setInput] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    // ... existing state ...
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -40,9 +39,12 @@ export function SultanaChatButton() {
         return () => window.removeEventListener('openSultanaChat', handleOpenChat)
     }, [])
 
-    // ... existing effects ...
-
-    // ... existing effects ...
+    // Scroll to bottom when messages change or chat opens
+    useEffect(() => {
+        if (isOpen) {
+            scrollToBottom()
+        }
+    }, [messages, isOpen, isLoading])
 
     const handleSendMessage = async () => {
         if (!input.trim() || isLoading) return
@@ -119,7 +121,7 @@ export function SultanaChatButton() {
                         initial={{ opacity: 0, y: 100, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 100, scale: 0.9 }}
-                        className="fixed inset-0 md:inset-auto md:bottom-24 md:left-8 z-[9998] w-full md:w-[400px] h-full md:h-[600px] bg-gray-950/95 backdrop-blur-2xl md:rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border-white/5 flex flex-col overflow-hidden"
+                        className="fixed inset-0 md:inset-auto md:bottom-24 md:left-8 z-[9998] w-full md:w-[400px] h-[100dvh] md:h-[600px] bg-gray-950/95 backdrop-blur-2xl md:rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border-white/5 flex flex-col overflow-hidden"
                         dir="rtl"
                     >
                         {/* Majestic Header */}
@@ -255,7 +257,7 @@ export function SultanaChatButton() {
                             <div className="mt-4 text-center">
                                 <div className="flex items-center justify-center gap-2 text-[10px] text-gray-600 font-bold uppercase tracking-[0.2em]">
                                     <Stars className="w-3 h-3 text-amber-900" />
-                                    <span>ذكاء فوازير • 2026</span>
+                                    <span>ذكاء فوازير</span>
                                     <Stars className="w-3 h-3 text-amber-900" />
                                 </div>
                             </div>

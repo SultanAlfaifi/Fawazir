@@ -77,7 +77,7 @@ export default async function CompetitionViewPage({ params }: { params: Promise<
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/10 blur-[130px] rounded-full -z-10" />
                 <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-rose-500/5 blur-[100px] rounded-full -z-10" />
 
-                <div className="bg-white border border-gray-100 rounded-[3.5rem] p-8 md:p-14 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.05)] overflow-hidden">
+                <div className="bg-white border border-gray-100 rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-14 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.05)] overflow-hidden">
                     {/* Header Layout */}
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
                         <div className="space-y-6 text-center lg:text-right flex-1">
@@ -147,7 +147,7 @@ export default async function CompetitionViewPage({ params }: { params: Promise<
                                 key={day.id}
                                 href={isLocked ? '#' : `/app/day/${day.id}`}
                                 className={cn(
-                                    "group relative p-8 rounded-[3.5rem] transition-all duration-500 overflow-hidden border-2",
+                                    "group relative p-6 md:p-8 rounded-[2.5rem] md:rounded-[3.5rem] transition-all duration-500 overflow-hidden border-2",
                                     isLocked
                                         ? "bg-gray-50/50 border-gray-200/40 opacity-50 grayscale cursor-not-allowed"
                                         : isComplete

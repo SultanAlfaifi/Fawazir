@@ -116,7 +116,7 @@ export default async function OverviewPage() {
             {/* Teammate Section - Sticky/Priority */}
             {myTeam && teammateTheme && themeStyles && (
                 <div className={cn(
-                    "relative group overflow-hidden rounded-[3.5rem] border-2 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl transition-all animate-in slide-in-from-top duration-700",
+                    "relative group overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl transition-all animate-in slide-in-from-top duration-700",
                     themeStyles.bg,
                     themeStyles.border,
                     themeStyles.hover
@@ -165,7 +165,7 @@ export default async function OverviewPage() {
             )}
 
             {/* Hero Countdown Card */}
-            <div className="relative group overflow-hidden rounded-[3.5rem] bg-[#0A0A0E] border-2 border-white/5 p-10 md:p-16 flex flex-col items-center text-center shadow-2xl transition-all hover:border-white/10">
+            <div className="relative group overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem] bg-[#0A0A0E] border-2 border-white/5 p-8 md:p-16 flex flex-col items-center text-center shadow-2xl transition-all hover:border-white/10">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] opacity-5 pointer-events-none" />
                 <div className="absolute -top-24 -left-24 w-64 h-64 bg-amber-500/10 blur-[100px] rounded-full" />
 
@@ -235,7 +235,7 @@ export default async function OverviewPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3 md:gap-4">
+                <div className="grid grid-cols-2 min-[400px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3 md:gap-4">
                     {days.map((day: any) => {
                         const evalForDay = myEvaluations.find((e: any) => e.dayId === day.id)
                         return (

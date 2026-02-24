@@ -15,7 +15,8 @@ async function main() {
       passwordHash: adminPassword,
       role: 'ADMIN',
       displayName: 'المدير العام',
-      bio: 'مشرف المنصة الأول'
+      bio: 'مشرف المنصة الأول',
+      emailVerified: new Date()
     }
   })
 
@@ -32,7 +33,8 @@ async function main() {
       displayName: 'المتسابق الأول',
       bio: 'محب للتحديات',
       avatar: 'rocket',
-      color: 'indigo'
+      color: 'indigo',
+      emailVerified: new Date()
     }
   })
 

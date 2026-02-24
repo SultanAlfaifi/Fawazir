@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -17,6 +18,7 @@ model User {
   bio                String?
   avatar             String?
   color              String?
+  emailVerified      DateTime?           // Added for verification logic
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   myCompetitions     Competition[]       @relation("Owner")
@@ -28,6 +30,21 @@ model User {
   tasks              Task[]
   dailyEvaluations   DailyEvaluation[]
   khairEntries       KhairEntry[]
+  emailVerifications EmailVerification[] // Relation to tokens
+}
+
+model EmailVerification {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  ip        String?   // Added for security tracking
+  userAgent String?   // Added for security tracking
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Competition {

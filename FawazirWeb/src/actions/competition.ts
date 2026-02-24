@@ -111,6 +111,5 @@ export async function createCompetition(prevState: unknown, formData: FormData) 
         }
     })
 
-    revalidatePath('/admin/competitions')
-    return { success: true, message: 'تم إنشاء المسابقة بنجاح' }
+    return { success: true, message: 'تم إنشاء المسابقة بنجاح', code }
 }

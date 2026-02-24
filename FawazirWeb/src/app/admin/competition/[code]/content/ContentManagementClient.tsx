@@ -127,7 +127,12 @@ export default function ContentManagementPage({ competition, days, participants,
     }
 
     return (
-        <div className="space-y-8 pb-20">
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="space-y-8 pb-20"
+        >
             {/* ── Navigation Tabs ── */}
             <div className="sticky top-[75px] z-30 flex justify-center mb-10">
                 <div className="inline-flex p-1 bg-gray-100/50 backdrop-blur-md rounded-2xl border border-gray-200/50">
@@ -269,7 +274,7 @@ export default function ContentManagementPage({ competition, days, participants,
                     days={localDays}
                 />
             )}
-        </div>
+        </motion.div>
     )
 }
 
