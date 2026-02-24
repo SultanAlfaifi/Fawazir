@@ -16,9 +16,9 @@ export function HomeSultana() {
 
                     <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center text-white">
                         <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
                             className="space-y-8 text-center lg:text-right"
                         >
                             <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-orange-400 text-[11px] font-black uppercase tracking-[0.2em] mx-auto lg:mr-0">
@@ -52,9 +52,9 @@ export function HomeSultana() {
 
                         {/* Visual AI - Subtle Entrance */}
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
                             className="relative flex items-center justify-center h-full min-h-[350px]"
                         >
                             <div className="w-full max-w-sm bg-white/5 backdrop-blur-md border border-white/10 rounded-[3rem] p-8 md:p-10 shadow-lg relative transform-gpu">
@@ -75,19 +75,19 @@ export function HomeSultana() {
                                 {/* Chat Bubbles with staggered entrance */}
                                 <div className="space-y-5">
                                     <motion.div
-                                        initial={{ opacity: 0, x: 10 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
+                                        initial={{ opacity: 0, y: 5 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
-                                        transition={{ delay: 0.4 }}
+                                        transition={{ delay: 0.2 }}
                                         className="bg-white/5 rounded-3xl rounded-tr-none p-5 text-sm md:text-base text-gray-300 font-bold border border-white/5"
                                     >
                                         أهلاً يا بطل! لغز اليوم يبغى له تركيز.. تبي تلميحة؟ 😉😸
                                     </motion.div>
                                     <motion.div
-                                        initial={{ opacity: 0, x: -10 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
+                                        initial={{ opacity: 0, y: 5 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
-                                        transition={{ delay: 0.7 }}
+                                        transition={{ delay: 0.4 }}
                                         className="bg-orange-500 rounded-3xl rounded-tl-none p-5 text-sm md:text-base text-white font-black w-fit mr-auto shadow-md shadow-orange-500/5"
                                     >
                                         أكيد! علميني بسرعة 😂

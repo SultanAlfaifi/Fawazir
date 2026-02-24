@@ -1,26 +1,30 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.APP_URL || 'http://localhost:3000'
-const fromEmail = process.env.RESEND_FROM_EMAIL || 'Fawazir <onboarding@resend.dev>'
-
 export async function sendVerificationEmail(email: string, token: string) {
+    // Read variables inside the function to ensure they are up to date
+    const apiKey = process.env.RESEND_API_KEY
+    const fromEmail = process.env.RESEND_FROM_EMAIL
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.APP_URL || 'http://localhost:3000'
+
     const confirmLink = `${baseUrl}/verify?token=${token}`
-    const devLink = `http://localhost:3000/verify?token=${token}`
 
-    console.log('-----------------------------------------')
-    console.log('🔗 [DEV] رابط تفعيل الحساب (Localhost):')
-    console.log(devLink)
-    console.log('-----------------------------------------')
-
-    if (!process.env.RESEND_API_KEY) {
+    if (!apiKey) {
         console.error('❌ Missing RESEND_API_KEY in environment variables');
         return { success: false, error: 'Email configuration missing' };
     }
 
+    if (!fromEmail) {
+        console.error('❌ Missing RESEND_FROM_EMAIL in environment variables');
+        return { success: false, error: 'Sender email configuration missing' };
+    }
+
+    const resend = new Resend(apiKey)
+
     try {
-        console.log('📬 Attempting to send simple email to:', email);
-        console.log('📤 From:', fromEmail);
+        console.log('📬 Attempting to send verification email:');
+        console.log(`📤 From: ${fromEmail}`);
+        console.log(`📥 To: ${email}`);
+        console.log(`🔗 Link: ${confirmLink}`);
 
         const { data, error } = await resend.emails.send({
             from: fromEmail,
@@ -58,10 +62,9 @@ export async function sendVerificationEmail(email: string, token: string) {
             return { success: false, error };
         }
 
-        console.log('✅ Email sent successfully! Message ID:', data?.id);
-        return { success: true };
+        return { success: true, data };
     } catch (error) {
-        console.error('❌ Sudden Email error:', error)
+        console.error('❌ Suddenly Email error:', error)
         return { success: false, error }
     }
 }

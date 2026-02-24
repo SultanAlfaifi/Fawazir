@@ -16,11 +16,12 @@ export function HomeNavbar() {
 
     return (
         <motion.nav
-            initial={{ y: -50, opacity: 0 }}
+            initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.4 }}
             className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled
-                    ? 'py-4 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm'
-                    : 'py-8 bg-transparent'
+                ? 'py-4 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm'
+                : 'py-8 bg-transparent'
                 }`}
         >
             <div className="container mx-auto px-6 flex items-center justify-between">

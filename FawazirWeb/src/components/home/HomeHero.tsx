@@ -8,17 +8,18 @@ import { ArrowLeft, Trophy } from 'lucide-react'
 export function HomeHero() {
     // Smoother, light transitions for better performance
     const fadeUp = {
-        initial: { opacity: 0, y: 12 },
+        initial: { opacity: 0, y: 10 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } // Smooth quint easing
+        transition: { duration: 0.5, ease: "easeOut" as const }
     }
 
     return (
         <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-white">
             {/* Ultra-Light Background - Completely static to avoid re-paints */}
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-                <div className="absolute -top-[10%] -right-[5%] w-[30rem] h-[30rem] bg-amber-50 rounded-full blur-[120px] opacity-60" />
-                <div className="absolute -bottom-[5%] -left-[5%] w-[30rem] h-[30rem] bg-indigo-50 rounded-full blur-[120px] opacity-50" />
+            {/* Optimized Background - Less blur for mobile performance */}
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden select-none">
+                <div className="absolute -top-[5%] -right-[5%] w-[20rem] md:w-[35rem] h-[20rem] md:h-[35rem] bg-amber-50 rounded-full blur-[80px] md:blur-[120px] opacity-40 md:opacity-60" />
+                <div className="absolute -bottom-[5%] -left-[5%] w-[20rem] md:w-[35rem] h-[20rem] md:h-[35rem] bg-indigo-50 rounded-full blur-[80px] md:blur-[120px] opacity-30 md:opacity-50" />
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
