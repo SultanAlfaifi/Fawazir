@@ -117,7 +117,7 @@ export async function registerPlayer(prevState: unknown, formData: FormData) {
         const userAgent = headerList.get('user-agent') || 'unknown'
 
         const token = await generateVerificationToken(user.id, ip, userAgent)
-        const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL || process.env.APP_URL || 'http://localhost:3000'}/verify?token=${token}`
+        const confirmLink = `https://fawazir.com/verify?token=${token}`
 
         console.log('-----------------------------------------')
         console.log('🔗 [DEV] رابط تفعيل الحساب:')
@@ -206,7 +206,7 @@ export async function registerAdmin(prevState: unknown, formData: FormData) {
     const userAgent = headerList.get('user-agent') || 'unknown'
 
     const token = await generateVerificationToken(user.id, ip, userAgent)
-    const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL || process.env.APP_URL || 'http://localhost:3000'}/verify?token=${token}`
+    const confirmLink = `https://fawazir.com/verify?token=${token}`
 
     console.log('-----------------------------------------')
     console.log('🔗 [DEV] رابط تفعيل المشرف:')
