@@ -10,7 +10,7 @@ export function HomeHero() {
     const fadeUp = {
         initial: { opacity: 0, y: 12 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } // Smooth quint easing
+        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } // Smooth quint easing
     }
 
     return (
@@ -38,7 +38,7 @@ export function HomeHero() {
                         <motion.h1
                             initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const, delay: 0.1 }}
                             className="text-5xl md:text-8xl font-black text-gray-950 leading-[1.05] tracking-tight transform-gpu"
                         >
                             اصنع مسابقتك. <br />
@@ -49,7 +49,7 @@ export function HomeHero() {
                         <motion.p
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const, delay: 0.2 }}
                             className="text-lg md:text-2xl text-gray-400 font-bold max-w-xl leading-relaxed mx-auto transform-gpu"
                         >
                             نظام متكامل لإدارة التحديات اليومية <br /> والأنشطة التفاعلية بكل بساطة.
@@ -60,7 +60,7 @@ export function HomeHero() {
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const, delay: 0.3 }}
                         className="flex flex-col sm:flex-row items-center gap-5 pt-4 w-full sm:w-auto"
                     >
                         <Link
