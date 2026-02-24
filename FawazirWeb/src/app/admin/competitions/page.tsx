@@ -3,6 +3,7 @@ import prisma from '@/lib/db'
 import { Plus, Users, Calendar, Crown, Copy, MoreVertical, Trophy, Star, Activity, ArrowUpRight, Shield, LayoutGrid } from 'lucide-react'
 import Link from 'next/link'
 import AdminShell from '@/components/admin/AdminShell'
+import { CopyButton } from '@/components/admin/CopyButton'
 
 export default async function AdminCompetitionsPage() {
     const session = await verifySession()
@@ -146,17 +147,7 @@ export default async function AdminCompetitionsPage() {
                                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">رمز الانضمام</span>
                                         <span className="font-mono font-black text-lg text-white tracking-[0.2em]">{comp.code}</span>
                                     </div>
-                                    <button
-                                        className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all active:scale-90"
-                                        title="نسخ الرمز"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            navigator.clipboard.writeText(comp.code);
-                                        }}
-                                    >
-                                        <Copy className="w-4 h-4" />
-                                    </button>
+                                    <CopyButton text={comp.code} />
                                 </div>
 
                                 <div className="mt-6 flex items-center justify-center">
