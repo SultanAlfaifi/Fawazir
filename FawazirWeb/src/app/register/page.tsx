@@ -27,12 +27,12 @@ export default function RegisterPage() {
             opacity: 1,
             transition: { staggerChildren: 0.05, delayChildren: 0.05 }
         }
-    }
+    } as const
 
     const itemVariants = {
         hidden: { y: 10, opacity: 0 },
         visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 30 } }
-    }
+    } as const
 
     const passwordRequirements = [
         { label: '8 أحرف+', met: password.length >= 8 },

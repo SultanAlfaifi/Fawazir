@@ -3,7 +3,6 @@ import prisma from '@/lib/db'
 import { Plus, Users, Calendar, Crown, Copy, MoreVertical, Trophy, Star, Activity, ArrowUpRight, Shield, LayoutGrid } from 'lucide-react'
 import Link from 'next/link'
 import AdminShell from '@/components/admin/AdminShell'
-import * as motion from 'framer-motion/client'
 
 export default async function AdminCompetitionsPage() {
     const session = await verifySession()
