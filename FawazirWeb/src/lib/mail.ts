@@ -2,7 +2,7 @@ import { Resend } from 'resend'
 
 export async function sendVerificationEmail(email: string, token: string) {
     // Explicitly using the requested sender address
-    const baseUrl = "https://fawazir.com"
+    const baseUrl = "https://www.fawazir.com"
     const apiKey = process.env.RESEND_API_KEY
     const fromEmail = "Fawazir <hello@mail.fawazir.com>"
 

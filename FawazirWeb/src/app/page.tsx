@@ -10,7 +10,7 @@ export default function Home() {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "فوازير",
-        "url": "https://fawazir.com",
+        "url": "https://www.fawazir.com",
         "description": "اصنع مسابقتك، كُن القائد - منصة إدارة التحديات الذكية",
     }
 

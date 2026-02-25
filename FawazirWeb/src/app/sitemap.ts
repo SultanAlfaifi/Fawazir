@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://fawazir.com'
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.fawazir.com'
 
     return [
         {
