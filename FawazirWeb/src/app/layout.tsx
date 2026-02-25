@@ -19,7 +19,7 @@ export const viewport: Viewport = {
   viewportFit: 'cover', // Handle notch on mobile
 };
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://fawazir.me";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://fawazir.com";
 
 export const metadata: Metadata = {
   title: {
