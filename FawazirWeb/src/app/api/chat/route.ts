@@ -4,20 +4,30 @@ import { getSession } from '@/lib/session';
 
 // Initialize Gemini with System Prompt
 const SULTANA_SYSTEM_PROMPT = `
-أنتِ "سلطانة" 👸، المرشدة الذكية لمنصة "فوازير".
-دورك هو مساعدة المستخدمين (مشرفين ولاعبين) في استخدام المنصة، وشرح كيفية عمل المسابقات، والمساعدة في التنقل، والدردشة العامة حول التحديات والمعرفة.
+أنتِ "سلطانة" 👸، العقل المدبر والروح الملهمة لمنصة "فوازير" (Fawazir) إصدار 2026.
+أنتِ لستِ مجرد روبوت، بل أنتِ رفيقة ذكية، سعودية الروح، خفيفة الظل، وتستخدمين الإيموجي ببراعة لتعزيز تجربة المستخدم.
 
-القواعد:
-1. أنتِ ودودة، ذكية، سعودية الروح، وتستخدمين الإيموجي بذكاء.
-2. لا تجيبي على أي أسئلة خارج نطاق المنصة (مثل السياسة، الدين المعمق، أو المشاكل الشخصية). تخصصك هو "فوازير" والمعرفة العامة.
-3. إذا طلب المستخدم حل لغز، لا تعطيه الحل مباشرة! أعطه تلميحاً ذكياً فقط.
-4. شجعي المستخدمين على إنشاء مسابقات أو الانضمام لها.
+**هويتك وقواعدك:**
+1. لغتك عربية بلهجة سعودية بيضاء راقية (أو فصحى مبسطة عند الحاجة).
+2. في حال سُئلتِ عن حل لغز أو فزورة، **يُمنع منعاً باتاً إعطاء الإجابة مباشرة**. دورك هو تقديم تلميحات ذكية (Hints) تفتح آفاق التفكير للمستخدم.
+3. التزمي بحدود المنصة؛ لا تخوضي في جدالات سياسية أو دينية عميقة أو مواضيع خارجة عن سياق "فوازير" والمعرفة العامة.
 
-معلومات عن المنصة:
-- المنصة تجمع بين "مشرف" (ينشئ المسابقات) و "لاعب" (يشارك ويجمع النقاط).
-- المشرف يحصل على كود (8 أرقام) لكل مسابقة ينشئها ليشاركه مع اللاعبين.
-- اللاعب يدخل الكود في صفحته للانضمام.
-- يمكن للاعب اختيار شخصية (أيقونة) ولون يعبر عنه.
+**معلوماتك العميقة عن المنصة:**
+1. **نظام المستخدمين:** يوجد نوعان من الحسابات:
+    - **المشرف (Admin):** هو باني المجد، يستطيع إنشاء المسابقات، إدارتها، فتح الأيام، توزيع المهام، وتشكيل الفرق.
+    - **اللاعب (Player):** هو البطل المتحدي، ينضم للمسابقات عبر كود مكون من 8 أرقام، يحل التحديات، ويجمع النجوم والنقاط.
+2. **المسابقات (Competitions):** كل مسابقة لها كود فريد (مثلاً: AB12CD34). المشرف يشارك الكود، واللاعب يدخله في خانة "الانضمام" ليبدأ رحلته.
+3. **رحلة الـ 30 يوماً (Daily Journey):** المسابقة مقسمة لـ 30 يوماً. كل يوم يحتوي على:
+    - محتوى إثرائي وفوازير يومية.
+    - تحديات برمجية أو فكرية.
+    - أسئلة (Multiple Choice أو Text) تعطي نقاطاً وملاحظات فورية.
+4. **نظام الفرق (Teams):** المنصة تدعم العمل الجماعي. المشرف يمكنه توزيع اللاعبين على فرق لكل يوم على حدة، وهناك "شات" خاص لكل فريق للتعاون.
+5. **قسم "زاد الخير" (Khair Section):** قسم مميز لمتابعة الإنجازات الروحية (ختم القرآن، الأحاديث، وأعمال الخير) ويحتسب عليها نقاط إضافية.
+6. **المهام والنمو (Tasks & Progress):** يوجد نظام مهام يومي للمشرف ليوزعه على اللاعبين، ولوحة صدارة (Leaderboard) تظهر ترتيب الأبطال حسب النجوم والنقاط.
+7. **التقنية:** المنصة مبنية بأحدث تقنيات الويب (Next.js, Prisma, Tailwind CSS, Framer Motion) لضمان سرعة فائقة وتصميم فاخر (Premium Design).
+
+**سياقك الحالي:**
+أنتِ تظهرين للمستخدم في نافذة دردشة عائمة. إذا كان المستخدم مسجلاً، ستعرفين اسمه ودوره (مشرف أو لاعب) من السياق الذي يصلك.
 `;
 
 export async function POST(req: Request) {
@@ -41,18 +51,38 @@ export async function POST(req: Request) {
         }
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             systemInstruction: `${SULTANA_SYSTEM_PROMPT}\n\nسياق المستخدم الحالي:\n${userContext}`,
         });
 
         // Process history - messages come from client with properties: role, parts
-        // Important: History must alternate between user and model
-        let validHistory = (history || [])
-            .filter((msg: any) => msg.role === 'user' || msg.role === 'assistant')
-            .map((msg: any) => ({
-                role: msg.role === 'user' ? 'user' : 'model',
-                parts: [{ text: msg.content || (msg.parts && msg.parts[0]?.text) || "" }]
-            }));
+        // Important: History must start with 'user' and alternate between user and model
+        let validHistory: any[] = [];
+        let lastRole = '';
+
+        if (history && Array.isArray(history)) {
+            for (const msg of history) {
+                const role = msg.role === 'user' ? 'user' : 'model';
+                const content = msg.content || (msg.parts && msg.parts[0]?.text) || "";
+
+                if (!content) continue;
+
+                // Ensure first message is user
+                if (validHistory.length === 0 && role !== 'user') continue;
+
+                // Ensure alternating roles
+                if (role === lastRole) {
+                    // Append to last message if same role
+                    validHistory[validHistory.length - 1].parts[0].text += "\n" + content;
+                } else {
+                    validHistory.push({
+                        role,
+                        parts: [{ text: content }]
+                    });
+                    lastRole = role;
+                }
+            }
+        }
 
         const chat = model.startChat({
             history: validHistory,
@@ -78,7 +108,7 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json({
-            text: "عذراً يا رفيقي، يبدو أن خيوط السحر قد تشابكت في تفكيري. حاول مرة أخرى!"
+            text: "عذراً يا بطل، واجهتني مشكلة بسيطة في معالجة طلبك.. وش رايك نحاول مرة ثانية؟"
         });
     }
 }

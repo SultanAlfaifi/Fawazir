@@ -1,15 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Cairo } from "next/font/google"; // Using Cairo for modern Arabic typography
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SultanaChatButton } from "@/components/SultanaChatButton";
 import { ToastProvider } from "@/components/ui/Toaster";
 
-const cairo = Cairo({
-  subsets: ["arabic"],
-  variable: "--font-cairo",
-  weight: ["300", "400", "500", "700", "900"],
-  display: 'swap', // Improve LCP by showing fallback font first
+const baloo = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Cairo-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Cairo-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/BalooBhaijaan2-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-baloo",
+  display: 'swap',
 });
 
 export const viewport: Viewport = {
@@ -27,7 +42,7 @@ export const metadata: Metadata = {
     template: "%s | فوازير",
   },
   description: "منصة فوازير الذكية الأولى لعام 2026 - تحديات يومية، جوائز قيمة، وتجربة فريدة مدعومة بالذكاء الاصطناعي مع سلطانة.",
-  keywords: ["فوازير", "فوازير 2026", "مسابقات", "ذكاء اصطناعي", "سلطانة", "تحديات", "ربح جوائز", "رمضان 2026", "رمضان"],
+  keywords: ["فوازير", "فوازير 2026", "مسابقات", "ذكاء اصطناعي", "سلطانة", "تحديات", "ربح جوائز"],
   authors: [{ name: "فوازير" }],
   creator: "فوازير",
   publisher: "فوازير",
@@ -87,7 +102,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <body className={`${cairo.className} antialiased min-h-dynamic`}>
+      <body className={`${baloo.className} antialiased min-h-dynamic`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

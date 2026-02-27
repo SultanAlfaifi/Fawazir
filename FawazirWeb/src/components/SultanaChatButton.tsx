@@ -72,7 +72,7 @@ export function SultanaChatButton() {
             const data = await response.json()
             setMessages(prev => [...prev, { role: 'assistant', content: data.text }])
         } catch (error) {
-            setMessages(prev => [...prev, { role: 'assistant', content: 'عذراً يا رفيقي، يبدو أن خيوط السحر قد تشابكت. حاول مرة أخرى لاحقاً.' }])
+            setMessages(prev => [...prev, { role: 'assistant', content: 'عذراً يا بطل، حصل خطأ غير متوقع.. جرب ترسل رسالتك مرة ثانية.' }])
         } finally {
             setIsLoading(false)
         }

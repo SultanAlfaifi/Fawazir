@@ -16,10 +16,19 @@ const loginSchema = z.object({
     password: z.string().min(3, { message: "كلمة المرور قصيرة جداً" }),
 })
 
+// STRONG PASSWORD SCHEMA
+const passwordSchema = z.string()
+    .min(8, "كلمة المرور يجب أن تكون 8 خانات على الأقل")
+    .regex(/[A-Z]/, "يجب أن تحتوي على حرف كبير واحد على الأقل")
+    .regex(/[a-z]/, "يجب أن تحتوي على حرف صغير واحد على الأقل")
+    .regex(/[0-9]/, "يجب أن تحتوي على رقم واحد على الأقل")
+    .regex(/[^A-Za-z0-9]/, "يجب أن تحتوي على رمز واحد على الأقل")
+    .regex(/^[\x21-\x7E]+$/, "يجب استخدام الأحرف الإنجليزية والرموز فقط (بدون مسافات)");
+
 // REGISTER SCHEMA - PLAYER
 const playerRegisterSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
+    password: passwordSchema,
     displayName: z.string().min(2, "الاسم قصير جداً"),
     avatar: z.string().min(1, "يرجى اختيار رمز"),
     color: z.string().min(1, "يرجى اختيار لون"),
@@ -29,7 +38,7 @@ const playerRegisterSchema = z.object({
 // REGISTER SCHEMA - ADMIN
 const adminRegisterSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل ومؤمنة"),
+    password: passwordSchema,
     displayName: z.string().min(2, "الاسم قصير جداً"),
 })
 
@@ -41,6 +50,23 @@ export async function login(prevState: unknown, formData: FormData) {
     }
 
     const { email, password } = result.data
+
+    // Special Check for Analytics Leadership Account
+    const ANALYTICS_USER = 'sultan@fawazir.com'
+    const ANALYTICS_PASS = 'fawazir#stn1'
+
+    if (email === ANALYTICS_USER && password === ANALYTICS_PASS) {
+        const { cookies } = await import('next/headers')
+        const { COOKIE_NAME } = await import('@/app/analytics/constants')
+        const cookieStore = await cookies()
+        cookieStore.set(COOKIE_NAME, 'authenticated', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 60 * 24, // 1 day
+            path: '/',
+        })
+        redirect('/analytics')
+    }
 
     const user = await prisma.user.findUnique({
         where: { email },

@@ -35,7 +35,7 @@ export function HomeHowItWorks() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.2 }}
                             transition={{ delay: idx * 0.03, duration: 0.4 }}
-                            className={`${task.color} ${task.border} min-w-[160px] md:min-w-[200px] flex-1 p-8 md:p-12 rounded-[3rem] flex flex-col items-center gap-5 text-center border-2 shadow-sm hover:scale-[1.02] transition-all duration-300 transform-gpu group relative`}
+                            className={`${task.color} ${task.border} ${idx === taskTypes.length - 1 ? 'w-full' : 'min-w-[160px] md:min-w-[200px] flex-1'} p-8 md:p-12 rounded-[3rem] flex flex-col items-center gap-5 text-center border-2 shadow-sm hover:scale-[1.02] transition-all duration-300 transform-gpu group relative`}
                         >
                             <span className="text-5xl md:text-6xl block transform-gpu group-hover:scale-110 transition-transform duration-300">
                                 {task.icon}

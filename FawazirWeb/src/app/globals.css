@@ -9,7 +9,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-baloo);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -53,11 +53,13 @@ body {
 
 /* Disable heavy blurs on low-power devices/small screens if needed */
 @media (max-width: 768px) {
-  .backdrop-blur-md, 
-  .backdrop-blur-lg, 
-  .backdrop-blur-xl, 
+
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl,
   .backdrop-blur-2xl {
-    backdrop-filter: blur(8px); /* Reduce blur intensity on mobile */
+    backdrop-filter: blur(8px);
+    /* Reduce blur intensity on mobile */
     -webkit-backdrop-filter: blur(8px);
   }
 }

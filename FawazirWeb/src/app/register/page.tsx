@@ -34,13 +34,38 @@ export default function RegisterPage() {
         visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 30 } }
     } as const
 
-    const passwordRequirements = [
-        { label: '8 أحرف+', met: password.length >= 8 },
-        { label: 'رقم', met: /\d/.test(password) },
-        { label: 'حرف كبير', met: /[A-Z]/.test(password) },
-    ]
+    // Password validation rules
+    const rules = [
+        { regex: /.{8,}/, text: "8 خانات على الأقل" },
+        { regex: /[a-z]/, text: "حرف إنجليزي صغير (a-z)" },
+        { regex: /[A-Z]/, text: "حرف إنجليزي كبير (A-Z)" },
+        { regex: /[0-9]/, text: "رقم واحد على الأقل (0-9)" },
+        { regex: /[^A-Za-z0-9]/, text: "رمز مساند (مثل @ # $ %)" },
+        { regex: /^[\x21-\x7E]*$/, text: "بدون مسافات أو أحرف عربية", exclusive: true }
+    ];
+
+    const getStrength = () => {
+        if (!password) return 0;
+        let score = 0;
+        if (/.{8,}/.test(password)) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+        return score; // Max 5
+    };
+
+    const strength = getStrength();
+    const strengthPercentage = (strength / 5) * 100;
+
+    let strengthColor = "bg-gray-200";
+    let strengthText = "";
+    if (strength > 0 && strength < 3) { strengthColor = "bg-red-400"; strengthText = "ضعيفة"; }
+    else if (strength >= 3 && strength < 5) { strengthColor = "bg-amber-400"; strengthText = "متوسطة"; }
+    else if (strength === 5) { strengthColor = "bg-emerald-400"; strengthText = "قوية جداً!"; }
 
     const passwordsMatch = password.length > 0 && password === confirmPassword
+    const allRulesMet = strength === 5 && password.length > 0 && /^[\x21-\x7E]*$/.test(password);
 
     return (
         <div className="min-h-screen bg-white md:bg-gray-50 flex items-center justify-center p-0 md:p-10 font-sans text-gray-900 overflow-x-hidden" dir="rtl">
@@ -219,16 +244,39 @@ export default function RegisterPage() {
                                             </button>
                                         }
                                     />
-                                    {/* Compact Checklist */}
-                                    <div className="flex flex-wrap gap-x-4 gap-y-2 px-1">
-                                        {passwordRequirements.map((req, i) => (
-                                            <div key={i} className={`flex items-center gap-1.5 text-[10px] font-black transition-all ${req.met ? 'text-emerald-600' : 'text-gray-300'}`}>
-                                                <div className={`w-3 h-3 rounded-full flex items-center justify-center border ${req.met ? 'bg-emerald-500 border-emerald-500' : 'border-gray-200'}`}>
-                                                    {req.met && <Check className="w-2 h-2 text-white stroke-[3]" />}
-                                                </div>
-                                                {req.label}
+                                    {/* Interactive Progress Bar & Checklist */}
+                                    <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100/50 space-y-3">
+                                        {/* Progress Bar */}
+                                        <div className="space-y-1.5">
+                                            <div className="flex justify-between items-center text-[10px] font-black tracking-wider">
+                                                <span className="text-gray-400 uppercase">قوة كلمة المرور</span>
+                                                <span className={`${strengthColor.replace('bg-', 'text-')}`}>{strengthText}</span>
                                             </div>
-                                        ))}
+                                            <div className="flex gap-1 h-1.5 w-full bg-gray-200/50 rounded-full overflow-hidden">
+                                                <div className={`h-full transition-all duration-500 ease-out ${strengthColor}`} style={{ width: `${strengthPercentage}%` }} />
+                                            </div>
+                                        </div>
+
+                                        {/* Rules Checklist */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+                                            {rules.map((rule, idx) => {
+                                                let isMet = false;
+                                                if (rule.exclusive) {
+                                                    isMet = password.length > 0 && rule.regex.test(password);
+                                                } else {
+                                                    isMet = rule.regex.test(password);
+                                                }
+
+                                                return (
+                                                    <div key={idx} className={`flex items-center gap-1.5 text-[10px] font-black transition-colors duration-300 ${isMet ? 'text-emerald-500' : 'text-gray-400'}`}>
+                                                        <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors duration-300 shrink-0 ${isMet ? 'bg-emerald-500/10 text-emerald-500' : 'bg-gray-200/50 text-gray-400'}`}>
+                                                            {isMet ? <CheckCircle2 className="w-2.5 h-2.5" /> : <div className="w-1 h-1 rounded-full bg-gray-300" />}
+                                                        </div>
+                                                        <span className="truncate">{rule.text}</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                     <InputField
                                         name="confirmPassword"
@@ -253,7 +301,7 @@ export default function RegisterPage() {
                             <SubmitButton
                                 pending={role === 'PLAYER' ? playerPending : adminPending}
                                 text={role === 'PLAYER' ? "إنشاء حساب لاعب" : "إنشاء حساب مشرف"}
-                                disabled={!passwordsMatch || passwordRequirements.some(r => !r.met)}
+                                disabled={!passwordsMatch || !allRulesMet}
                             />
                         </form>
                     </motion.div>

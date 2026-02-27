@@ -43,7 +43,7 @@ export function CreateCompetitionForm() {
                             <input
                                 name="title"
                                 autoComplete="off"
-                                placeholder="مثلاً: صقور رمضان 2026"
+                                placeholder="مثلاً: تحدي فوازير 2026"
                                 className="w-full px-6 py-5 bg-gray-50 border border-transparent rounded-2xl font-black text-xl text-gray-900 placeholder:text-gray-300 focus:bg-white focus:border-amber-500/20 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all duration-300"
                             />
                             {state?.errors?.title && (

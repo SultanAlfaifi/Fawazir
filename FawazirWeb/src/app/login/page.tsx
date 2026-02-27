@@ -97,7 +97,12 @@ export default function LoginPage() {
 
                             {/* Password Input */}
                             <div className="space-y-2">
-                                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest block mr-2">كلمة المرور</label>
+                                <div className="flex items-center justify-between mr-2 ml-2">
+                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest block">كلمة المرور</label>
+                                    <Link href="/forgot-password" className="text-[11px] font-bold text-amber-600 hover:text-amber-500 transition-colors" tabIndex={-1}>
+                                        نسيت كلمة المرور؟
+                                    </Link>
+                                </div>
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-amber-500 transition-colors">
                                         <Lock className="w-5 h-5" />

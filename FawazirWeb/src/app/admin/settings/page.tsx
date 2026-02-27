@@ -4,16 +4,16 @@ import { Save, Calendar, Settings } from 'lucide-react'
 import { verifySession } from '@/lib/session'
 import AdminShell from '@/components/admin/AdminShell'
 
-async function getRamadanStart() {
+async function getCompetitionStart() {
     const setting = await prisma.settings.findUnique({
-        where: { key: 'ramadanStart' },
+        where: { key: 'competitionStart' },
     })
     return setting?.value || '2026-02-18'
 }
 
 export default async function AdminSettingsPage() {
     const session = await verifySession()
-    const ramadanStart = await getRamadanStart()
+    const competitionStart = await getCompetitionStart()
 
     return (
         <AdminShell session={session}>
@@ -24,21 +24,21 @@ export default async function AdminSettingsPage() {
                         <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">إعدادات النظام</span>
                     </div>
                     <h1 className="text-4xl font-black text-gray-900 tracking-tight">الإعدادات العامة</h1>
-                    <p className="text-gray-500 font-medium">تكوين إعدادات النظام وتواريخ البدء لرحلة رمضان.</p>
+                    <p className="text-gray-500 font-medium">تكوين إعدادات النظام وتواريخ البدء للتحدي.</p>
                 </div>
 
                 <form action={updateSettings} className="bg-white border border-gray-100 rounded-[2.5rem] p-8 space-y-8 shadow-sm">
                     <div className="space-y-4">
                         <label className="flex items-center gap-2 font-black text-gray-900 text-lg">
                             <Calendar className="w-6 h-6 text-amber-500" />
-                            <span>تاريخ بداية التحدي (بداية رمضان)</span>
+                            <span>تاريخ بداية التحدي</span>
                         </label>
                         <p className="text-sm text-gray-500 font-medium leading-relaxed">سيتم استخدام هذا التاريخ لحساب فتح الأيام تلقائياً. اليوم الأول يفتح في هذا التاريخ، واليوم الثاني في اليوم الذي يليه، وهكذا دواليك.</p>
 
                         <input
                             type="date"
-                            name="ramadanStart"
-                            defaultValue={ramadanStart}
+                            name="competitionStart"
+                            defaultValue={competitionStart}
                             className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-gray-900 font-bold focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all"
                         />
                     </div>

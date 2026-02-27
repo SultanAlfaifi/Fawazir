@@ -31,6 +31,7 @@ model User {
   dailyEvaluations   DailyEvaluation[]
   khairEntries       KhairEntry[]
   emailVerifications EmailVerification[] // Relation to tokens
+  passwordResets     PasswordResetToken[]
 }
 
 model EmailVerification {
@@ -41,6 +42,20 @@ model EmailVerification {
   usedAt    DateTime?
   ip        String?   // Added for security tracking
   userAgent String?   // Added for security tracking
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  ip        String?
+  userAgent String?
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

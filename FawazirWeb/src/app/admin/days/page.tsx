@@ -23,7 +23,7 @@ export default async function AdminDaysPage() {
                             <span className="text-[10px] font-black text-sky-600 uppercase tracking-widest">إدارة المحتوى والمخطط الزمني</span>
                         </div>
                         <h1 className="text-4xl font-black text-gray-900 tracking-tight">برنامج الـ ٣٠ يومًا</h1>
-                        <p className="text-gray-500 font-medium max-w-lg">التحكم الكامل في رحلة المتسابقين. افتح الأيام يدوياً أو اترك النظام يعمل تلقائياً حسب جدول رمضان.</p>
+                        <p className="text-gray-500 font-medium max-w-lg">التحكم الكامل في رحلة المتسابقين. افتح الأيام يدوياً أو اترك النظام يعمل تلقائياً حسب الجدول الزمني.</p>
                     </div>
 
                     <div className="flex items-center gap-6 bg-white p-3 rounded-[2rem] border border-gray-100 shadow-sm">
